@@ -16,5 +16,6 @@ with nixpkgs; mkShell {
     nodejs_20
     flyctl
     libgcc
+    turso-cli
   ];
 }
