@@ -17,5 +17,6 @@ with nixpkgs; mkShell {
     flyctl
     libgcc
     turso-cli
+    sqld
   ];
 }
