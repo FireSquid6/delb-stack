@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@libsql/client": "^0.5.3",
+    "@lucia-auth/adapter-drizzle": "^1.0.2",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.0",
-    "elysia": "^0.8.17"
+    "elysia": "^0.8.17",
+    "lucia": "^3.0.1",
+    "oslo": "^1.1.3"
   }
 }
