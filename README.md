@@ -2,17 +2,18 @@
 
 `D`rizzle [Site](https://orm.drizzle.team/)
 
-`L`ucia [Site](https://lucia-auth.com/)
-
 `E`lysia [Site](https://elysiajs.com/)
+
+`L`ucia [Site](https://lucia-auth.com/)
 
 `B`un [Site](https://bun.sh/)
 
 You may notice that this doesn't include a database. We use whatever SQL service fits our use case best. This could be:
 
-- [Supabase]
-- [Neon]
-- [Turso]
+- [Supabase](https://supabase.com/)
+- [Neon](https://neon.tech/)
+- [Turso](https://turso.tech/)
+- Bun's SQLite API
 - Self hosted:
   - Postgres
   - MySQL
@@ -33,7 +34,21 @@ You may also notice that there is no frontend. This is because DELB believes tha
 3. Transparent abstraction
 4. Cloud Agnosticism
 5. Portability
+6. Testability
+
+## Deploying
+
+Since we value cloud agnosticism, DELB is designed to be deployed anywhere. Some common options are:
+
+- [fly.io](https://fly.io) with docker
+- AWS/Google with docker
+- Nix (my personal favorite)
 
 # `create-delb-app`
 
-Create delb app is still being worked on.
+Create delb app is still being worked on. We plan to have options for:
+
+- Using a minimal or preconfigured example app
+- choosing your database
+- using docker or nix
+- bootstrapping a frontend
