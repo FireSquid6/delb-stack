@@ -1,8 +1,11 @@
 # The DELB Stack
 
 `D`rizzle [Site](https://orm.drizzle.team/)
+
 `L`ucia [Site](https://lucia-auth.com/)
+
 `E`lysia [Site](https://elysiajs.com/)
+
 `B`un [Site](https://bun.sh/)
 
 You may notice that this doesn't include a database. We use whatever SQL service fits our use case best. This could be:
