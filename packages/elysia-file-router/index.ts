@@ -38,6 +38,7 @@ export async function addDirectoryToElysia<Capsule>(
 
       const pathname = getPathnameFromFilepath(
         filepath as string,
+        options.directory,
         options.startingRoute ?? "",
       );
 
@@ -51,7 +52,6 @@ function addVerbs(app: Elysia, verbs: Verbs, pathname: string) {
 
   for (const name of names) {
     if (Object.hasOwn(verbs, name)) {
-      console.log("adding", name, pathname);
       switch (name) {
         case "post":
           app.post(pathname, verbs.post);

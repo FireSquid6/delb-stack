@@ -39,7 +39,17 @@ describe("example server", () => {
     const url = `http://localhost:${port}`;
     startServer(port);
 
-    const result = await fetch(`${url}/`);
-    console.log(await result.json());
+    let result = await fetch(`${url}/`);
+    expect(await result.json()).toEqual({
+      message: "Hello world!",
+    });
+
+    const verbs = ["GET", "POST", "PUT", "PATCH", "DELETE"];
+    for (const verb of verbs) {
+      result = await fetch(`${url}/user/add-user`, {
+        method: verb,
+      });
+      expect(await result.text()).toBe(verb.toLowerCase());
+    }
   });
 });
