@@ -36,13 +36,16 @@ export function findUserWithId(id: SelectUser["id"]): Promise<SelectUser[]> {
 export async function findUserWithEmail(
   email: SelectUser["email"],
 ): Promise<SelectUser> {
-  const users = await db.select().from(users).where(eq(users.email, email));
+  const foundUsers = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email));
 
-  if (users.length === 0) {
+  if (foundUsers.length === 0) {
     return Promise.reject(new Error("User not found"));
   }
 
-  return users[0];
+  return foundUsers[0];
 }
 
 export async function insertPost(data: InsertPost): Promise<void> {

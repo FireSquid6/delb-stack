@@ -27,7 +27,7 @@ You may also notice that there is no frontend. This is because DELB believes tha
 - Plain API services
 - all of the above!
 
-## Values
+# Values
 
 1. Frontend independence
 2. Simplicity
@@ -36,7 +36,80 @@ You may also notice that there is no frontend. This is because DELB believes tha
 5. Portability
 6. Testability
 
-## Deploying
+# Abstraction Model
+
+Delb uses the following layers of abstraction:
+
+```mermaid
+flowchart TD
+    A(Client) <--> Codebase
+    subgraph Codebase
+    B(Elysia API)
+    B <--> C(Capsule)
+    C <--> D(Drizzle ORM)
+    end
+    D <-->E[(Database)]
+```
+
+These are:
+
+- Client - your client code. Whatever frontend you feel like using.
+- API - Your main API exposed to the internet. It is built in Elysia using a file system router. It communicates with the client over HTTP (as well as [eden treaties](https://elysiajs.com/eden/treaty). Don't slack on them.)
+- Capsule - This serves as a "gateway" between your API and database. It can be mocked out to allow for testing of just the logic of the API.
+- Drizzle ORM - Drizzle ORM is how you communicate with your database. It allow you to easily swap your database or cloud provider without touching your code or schema.
+
+There's a bit of confusion around what code should go in your API routes and what should go in your capsule. In general:
+
+- If the piece of code is part of the logic of your application, it should go in the `api` directory in its respective route, or in the `lib`
+- If the piece of code deals with the actual fetching or pushing of data through drizzle, it should go in the `capsule` directory
+
+Some helpful rules for doing this """right""":
+
+1. You should have three test groups:
+1. Logic - tests a client communicating to an API with a mocked database capsule. Should mostly focus on validating application logic.
+1. Schema - tests the capsule communicating through drizzle to validate the schema of your application.
+1. E2E - a full test of your system
+1. Code in the API should never know about drizzle
+1. If you ever think one of the following thoughts, you are doing something wrong:
+1. "Man, this code sure is hard to writes tests for!"
+1. ""
+
+# Example Project Filesystem
+
+```
+/ <my project>
+  /website
+    <whatever code your website needs>
+  /mobile
+    <whatever code your mobile app needs>
+  /app --> should be its own package
+    package.json
+    .gitignore
+    drizzle.config.ts
+    migrate.ts
+
+    /db --> Handles connection to database
+    /lib --> Helper modules to keep your codebase dry
+    /api --> Filesystem router, like next js
+      index.ts
+      users/
+        index.ts
+      ...
+    /capsule --> Handles talking to drizzle
+      user.ts
+      posts.ts
+    /migrations
+    /tests
+      /schema
+        ...
+      /logic
+        ...
+      /e2e
+        ...
+
+```
+
+# Deploying
 
 Since we value cloud agnosticism, DELB is designed to be deployed anywhere. Some common options are:
 
