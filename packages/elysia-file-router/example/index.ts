@@ -1,12 +1,14 @@
-import type { TestCapsule } from "../index.test";
+import type { TestCapsule } from "../example-server";
 import type { ApiRoute } from "..";
 
-const rootFilepath: ApiRoute<TestCapsule> = () => {
+const thisRoute: ApiRoute<TestCapsule> = () => {
   return {
     get: () => {
-      return "Hello world"!;
+      return {
+        message: "Hello world!",
+      };
     },
   };
 };
 
-export default rootFilepath;
+export default thisRoute;

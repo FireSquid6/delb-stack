@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import type { Handler } from "elysia";
 import fs from "fs";
+import path from "path";
 
 interface FileRouterOptions<Capsule> {
   directory: string;
@@ -18,13 +19,19 @@ export interface Verbs {
   delete?: Handler;
 }
 
-export async function addDirectory<Capsule>(
+export async function addDirectoryToElysia<Capsule>(
   app: Elysia,
   options: FileRouterOptions<Capsule>,
 ) {
   fs.readdirSync(options.directory, { recursive: true }).forEach(
     async (filepath) => {
-      const module = await import(filepath as string);
+      filepath = path.join(options.directory, filepath as string);
+
+      if (fs.statSync(filepath).isDirectory()) {
+        return;
+      }
+
+      const module = require(`./${filepath}`);
       const route: ApiRoute<Capsule> = module.default as ApiRoute<Capsule>;
 
       const verbs = route(options.capsule);
@@ -44,6 +51,7 @@ function addVerbs(app: Elysia, verbs: Verbs, pathname: string) {
 
   for (const name of names) {
     if (Object.hasOwn(verbs, name)) {
+      console.log("adding", name, pathname);
       switch (name) {
         case "post":
           app.post(pathname, verbs.post);
@@ -67,6 +75,7 @@ function addVerbs(app: Elysia, verbs: Verbs, pathname: string) {
 
 export function getPathnameFromFilepath(
   filepath: string,
+  apiRoute: string,
   startingRoute: string = "",
 ): string {
   const parts = filepath.split("/");
@@ -78,6 +87,10 @@ export function getPathnameFromFilepath(
 
   if (parts[parts.length - 1] === "index") {
     parts.pop();
+  }
+
+  if (parts[0] === apiRoute) {
+    parts.shift();
   }
 
   const startingParts = startingRoute.split("/");
