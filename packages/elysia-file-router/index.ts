@@ -8,13 +8,15 @@ interface FileRouterOptions<Capsule> {
   startingRoute?: string;
 }
 
-type ApiRoute<Capsule> = (capsule: Capsule) => {
+type ApiRoute<Capsule> = (capsule: Capsule) => Verbs;
+
+interface Verbs {
   post?: Handler;
   get?: Handler;
   patch?: Handler;
   put?: Handler;
   delete?: Handler;
-};
+}
 
 export async function addDirectory<Capsule>(
   app: Elysia,
@@ -24,7 +26,7 @@ export async function addDirectory<Capsule>(
     async (filepath) => {
       const module = await import(filepath as string);
       const route: ApiRoute<Capsule> = module.default as ApiRoute<Capsule>;
-      const names = ["post", "get", "patch", "put", "delete"];
+
       const verbs = route(options.capsule);
 
       const pathname = getPathnameFromFilepath(
@@ -32,29 +34,35 @@ export async function addDirectory<Capsule>(
         options.startingRoute ?? "",
       );
 
-      for (const name of names) {
-        if (Object.hasOwn(verbs, name)) {
-          switch (name) {
-            case "post":
-              app.post(pathname, verbs.post);
-              break;
-            case "get":
-              app.get(pathname, verbs.get);
-              break;
-            case "patch":
-              app.patch(pathname, verbs.patch);
-              break;
-            case "put":
-              app.put(pathname, verbs.put);
-              break;
-            case "delete":
-              app.delete(pathname, verbs.delete);
-              break;
-          }
-        }
-      }
+      addVerbs(app, verbs, pathname);
     },
   );
+}
+
+function addVerbs(app: Elysia, verbs: Verbs, pathname: string) {
+  const names = ["post", "get", "patch", "put", "delete"];
+
+  for (const name of names) {
+    if (Object.hasOwn(verbs, name)) {
+      switch (name) {
+        case "post":
+          app.post(pathname, verbs.post);
+          break;
+        case "get":
+          app.get(pathname, verbs.get);
+          break;
+        case "patch":
+          app.patch(pathname, verbs.patch);
+          break;
+        case "put":
+          app.put(pathname, verbs.put);
+          break;
+        case "delete":
+          app.delete(pathname, verbs.delete);
+          break;
+      }
+    }
+  }
 }
 
 export function getPathnameFromFilepath(
