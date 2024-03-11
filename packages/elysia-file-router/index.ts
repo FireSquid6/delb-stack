@@ -8,9 +8,9 @@ interface FileRouterOptions<Capsule> {
   startingRoute?: string;
 }
 
-type ApiRoute<Capsule> = (capsule: Capsule) => Verbs;
+export type ApiRoute<Capsule> = (capsule: Capsule) => Verbs;
 
-interface Verbs {
+export interface Verbs {
   post?: Handler;
   get?: Handler;
   patch?: Handler;
