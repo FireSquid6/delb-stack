@@ -65,14 +65,12 @@ There's a bit of confusion around what code should go in your API routes and wha
 
 Some helpful rules for doing this """right""":
 
-1. You should have three test groups:
-1. Logic - tests a client communicating to an API with a mocked database capsule. Should mostly focus on validating application logic.
-1. Schema - tests the capsule communicating through drizzle to validate the schema of your application.
-1. E2E - a full test of your system
-1. Code in the API should never know about drizzle
-1. If you ever think one of the following thoughts, you are doing something wrong:
-1. "Man, this code sure is hard to writes tests for!"
-1. ""
+## Testing
+You should have three test groups:
+  1. Logic - tests a client communicating to an API with a mocked database capsule. Should mostly focus on validating application logic.
+  1. Schema - tests the capsule communicating through drizzle to validate the schema of your application.
+  1. E2E - a full test of your system doing what it's supposed to do
+You can bring whatever test runner you prefer. I find that bun's test runner typically does the job just fine.
 
 # Example Project Filesystem
 
