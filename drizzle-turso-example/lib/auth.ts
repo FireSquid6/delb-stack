@@ -4,7 +4,7 @@ import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
 import { Lucia, TimeSpan, generateId } from "lucia";
 import { isValidEmail } from "../lib/validators";
 import { Argon2id } from "oslo/password";
-import { findUserWithEmail, findUserWithId, insertUser } from "./crud";
+import { findUserWithEmail, insertUser } from "./crud";
 
 const adapter = new DrizzleSQLiteAdapter(db, sessions, users);
 
