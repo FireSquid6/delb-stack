@@ -1,15 +1,3 @@
-# elysia-file-router
+# delb-file-router
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.0.26. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+A custom file router for elysia to make using the delb stack easier.
