@@ -1,7 +1,6 @@
-import type { TestCapsule } from "../../example-server";
-import type { ApiRoute } from "../..";
+import type { ApiRoute } from "../../index";
 
-const thisRoute: ApiRoute<TestCapsule> = () => {
+const thisRoute: ApiRoute = () => {
   return {
     get: () => {
       return "get";

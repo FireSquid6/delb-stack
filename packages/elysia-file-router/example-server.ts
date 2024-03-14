@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import { addDirectoryToElysia } from ".";
+import { fileRouter } from ".";
 
 export interface TestCapsule {
   name: string;
@@ -8,13 +8,12 @@ export interface TestCapsule {
 
 export function startServer(port: number) {
   const app = new Elysia();
-  addDirectoryToElysia<TestCapsule>(app, {
-    directory: "example",
-    capsule: {
-      name: "jon doe",
-      description: "A sample description",
-    },
-  });
+  app.use(
+    fileRouter({
+      directory: "test-capsules",
+      startingRoute: "/api",
+    }),
+  );
 
   app.listen(port);
 }
