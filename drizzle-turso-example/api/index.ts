@@ -1,5 +1,5 @@
 import { type Context } from "elysia";
-import type { Verbs } from "..";
+import type { Verbs } from "delb-file-router";
 
 export default function Route(): Verbs {
   return {

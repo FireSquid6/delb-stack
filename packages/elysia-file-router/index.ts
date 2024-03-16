@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { Elysia } from "elysia";
 import type { Handler } from "elysia";
 import fs from "fs";
@@ -6,6 +7,7 @@ import path from "path";
 interface FileRouterOptions {
   directory: string;
   startingRoute?: string;
+  disableOutput?: boolean;
 }
 
 export type ApiRoute = () => Verbs;
@@ -20,6 +22,7 @@ export interface Verbs {
 
 export async function fileRouter(options: FileRouterOptions): Promise<Elysia> {
   const app = new Elysia();
+  console.log(chalk.bold("Adding Routes"));
   fs.readdirSync(options.directory, { recursive: true }).forEach(
     async (filepath) => {
       filepath = path.join(options.directory, filepath as string);
@@ -28,7 +31,7 @@ export async function fileRouter(options: FileRouterOptions): Promise<Elysia> {
         return;
       }
 
-      const module = require(`./${filepath}`);
+      const module = require(path.join(process.cwd(), `./${filepath}`));
       const route: ApiRoute = module.default as ApiRoute;
 
       const verbs = route();
@@ -39,18 +42,31 @@ export async function fileRouter(options: FileRouterOptions): Promise<Elysia> {
         options.startingRoute ?? "",
       );
 
-      addVerbs(app, verbs, pathname);
+      const added = addVerbs(app, verbs, pathname);
+
+      let outputString = "";
+      outputString += chalk.bold.yellow(pathname);
+      outputString += " --> ";
+      for (const verb of added) {
+        outputString += chalk.blue(verb) + " ";
+      }
+
+      if (options.disableOutput !== true) {
+        console.log(outputString);
+      }
     },
   );
 
   return Promise.resolve(app);
 }
 
-function addVerbs(app: Elysia, verbs: Verbs, pathname: string) {
-  const names = ["post", "get", "patch", "put", "delete"];
+function addVerbs(app: Elysia, verbs: Verbs, pathname: string): string[] {
+  const names = ["get", "post", "patch", "put", "delete"];
+  const added = [];
 
   for (const name of names) {
     if (Object.hasOwn(verbs, name)) {
+      added.push(name.toUpperCase());
       switch (name) {
         case "post":
           app.post(pathname, verbs.post);
@@ -70,6 +86,8 @@ function addVerbs(app: Elysia, verbs: Verbs, pathname: string) {
       }
     }
   }
+
+  return added;
 }
 
 export function getPathnameFromFilepath(
@@ -111,6 +129,5 @@ export function getPathnameFromFilepath(
   }
 
   const pathname = path.join("/" + parts.join("/"));
-  console.log(pathname);
   return pathname;
 }

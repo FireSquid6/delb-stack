@@ -10,8 +10,7 @@ export function startServer(port: number) {
   const app = new Elysia();
   app.use(
     fileRouter({
-      directory: "test-capsules",
-      startingRoute: "/api",
+      directory: "./example",
     }),
   );
 
