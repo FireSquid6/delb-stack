@@ -1,10 +1,15 @@
 import { type Context } from "elysia";
+import type { Verbs } from "..";
 
-export const GET = () => {
+export default function Route(): Verbs {
   return {
-    body: {
-      name: "jonathan deiss",
+    get: (ctx: Context) => {
+      return {
+        body: {
+          name: "jonathan deiss",
+        },
+        status: 200,
+      };
     },
-    status: 2000,
   };
-};
+}

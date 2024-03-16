@@ -1,5 +1,8 @@
 import { Elysia } from "elysia";
 import "dotenv/config";
+import type { Handler } from "elysia";
+import fs from "fs";
+import path from "path";
 
 const app = new Elysia();
 
@@ -10,10 +13,6 @@ app.listen(4000, () => {
 });
 
 export type App = typeof app;
-
-import type { Handler } from "elysia";
-import fs from "fs";
-import path from "path";
 
 interface FileRouterOptions {
   directory: string;
@@ -90,7 +89,7 @@ export function getPathnameFromFilepath(
   startingRoute: string = "",
 ): string {
   const parts = filepath.split("/");
-  while (parts[0] === "") {
+  while (parts[0] === "" || parts[0] === ".") {
     parts.shift();
   }
 
@@ -100,12 +99,17 @@ export function getPathnameFromFilepath(
     parts.pop();
   }
 
-  if (parts[0] === apiRoute) {
+  const apiParts = apiRoute.split("/");
+  while (apiParts[0] === "" || apiParts[0] === ".") {
+    apiParts.shift();
+  }
+
+  for (let i = 0; i < apiParts.length; i++) {
     parts.shift();
   }
 
   const startingParts = startingRoute.split("/");
-  while (startingParts[0] === "") {
+  while (startingParts[0] === "" || startingParts[0] === ".") {
     startingParts.shift();
   }
   while (startingParts.length > 0) {
@@ -117,5 +121,7 @@ export function getPathnameFromFilepath(
     }
   }
 
-  return path.join(process.cwd(), "/" + parts.join("/"));
+  const pathname = path.join("/" + parts.join("/"));
+  console.log(pathname);
+  return pathname;
 }

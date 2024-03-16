@@ -16,12 +16,10 @@
   "dependencies": {
     "@libsql/client": "^0.5.3",
     "@lucia-auth/adapter-drizzle": "^1.0.2",
-    "delb-file-router": "^1.0.0",
+    "delb-file-router": "^1.0.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.0",
     "elysia": "^0.8.17",
-    "elysia-autoroutes": "^0.5.0",
-    "elysia-file-router": "^0.0.1-beta.2",
     "lucia": "^3.0.1",
     "oslo": "^1.1.3"
   }
