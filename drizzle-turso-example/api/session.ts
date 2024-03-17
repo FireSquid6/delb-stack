@@ -29,10 +29,9 @@ export default function Route(): Verbs {
 
       try {
         const user = await findUserWithEmail(email);
-        const cookie = await newSession(user.id);
+        const cookie = await newSession(user.id, ctx);
 
         ctx.set.status = 201;
-        ctx.headers["Set-Cookie"] = cookie;
         return cookie;
       } catch (error) {
         ctx.set.status = 500;
