@@ -15,6 +15,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@elysiajs/cookie": "^0.8.0",
     "@libsql/client": "^0.5.3",
     "@lucia-auth/adapter-drizzle": "^1.0.2",
     "delb-file-router": "^1.2.0",

@@ -32,6 +32,7 @@ export default function Route(): Verbs {
         const cookie = await newSession(user.id);
 
         ctx.set.status = 201;
+        ctx.headers["Set-Cookie"] = cookie;
         return cookie;
       } catch (error) {
         ctx.set.status = 500;
@@ -39,11 +40,6 @@ export default function Route(): Verbs {
           error: "internal server error. Couldn't login user.",
         };
       }
-
-      ctx.set.status = 200;
-      return {
-        message: "logged in",
-      };
     },
     delete: async (ctx: Context) => { },
   };
