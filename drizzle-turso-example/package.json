@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "migrate": "bunx drizzle-kit generate:sqlite && bun run migrate.ts",
-    "dev": "bun run index.ts"
+    "dev": "bun run index.ts",
+    "studio": "bunx drizzle-kit studio"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -16,7 +17,7 @@
   "dependencies": {
     "@libsql/client": "^0.5.3",
     "@lucia-auth/adapter-drizzle": "^1.0.2",
-    "delb-file-router": "^1.0.1",
+    "delb-file-router": "^1.2.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.0",
     "elysia": "^0.8.17",

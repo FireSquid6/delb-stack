@@ -29,8 +29,16 @@ export async function patchPost(
   return updatedPost;
 }
 
-export function findUserWithId(id: SelectUser["id"]): Promise<SelectUser[]> {
-  return db.select().from(users).where(eq(users.id, id));
+export async function findUserWithId(
+  id: SelectUser["id"],
+): Promise<SelectUser> {
+  const foundUsers = await db.select().from(users).where(eq(users.id, id));
+
+  if (foundUsers.length === 0) {
+    return Promise.reject(new Error("User not found"));
+  }
+
+  return foundUsers[0];
 }
 
 export async function findUserWithEmail(

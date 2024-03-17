@@ -51,9 +51,12 @@ export async function createUser(
   }
 }
 
-export async function loginUserWithPassword(email: string, password: string) {
+export async function passwordIsValid(
+  email: string,
+  password: string,
+): Promise<boolean> {
   if (!isValidEmail(email)) {
-    throw new Error("Invalid email");
+    return Promise.resolve(false);
   }
 
   let id = "";
@@ -64,18 +67,10 @@ export async function loginUserWithPassword(email: string, password: string) {
     hashedPassword = user.hashedPassword;
   } catch (error) {
     // if there is no user that is fine
+    // we do this to prevent timing attacks
     id = "blahblahblahrandomstuff";
     hashedPassword = "blahblahblahrandomstuff";
   }
 
-  const validPassword = await new Argon2id().verify(hashedPassword, password);
-  if (!validPassword) {
-    return Promise.reject(new Error("Invalid password or email"));
-  }
-
-  const session = await auth.createSession(id, {
-    ip_country: "US", // todo: actually get this from the request
-  });
-
-  return Promise.resolve(session);
+  return new Argon2id().verify(hashedPassword, password);
 }
